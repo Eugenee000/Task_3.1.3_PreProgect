@@ -1,5 +1,6 @@
 package com.example.task_3_1_1.controllers;
 
+import com.example.task_3_1_1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
