@@ -5,6 +5,7 @@ import com.example.task_3_1_1.model.User;
 import com.example.task_3_1_1.service.RoleService;
 import com.example.task_3_1_1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,10 @@ public class AdminController {
     private RoleService roleService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String index(Model modelMap) {
-        modelMap.addAttribute("users", userService.getAllUsers());
-        return "admin/show_admin";
+    public String index(Model model) {
+        model.addAttribute("admin", ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()));
+        model.addAttribute("users", userService.getAllUsers());
+        return "admin/show_admin_info_about_users";
     }
 
     @GetMapping("/{id}/edit")
@@ -37,12 +39,14 @@ public class AdminController {
     @PostMapping("/{id}")
     public String upDate(@ModelAttribute("user") User user,
                          @PathVariable("id") Long id,
-                         @RequestParam("role") String[] role) {
+                         @RequestParam(value = "role", required = false) String[] role) {
         Set<Role> roleSet = new HashSet<>();
-        for (String roles : role) {
-            roleSet.add(roleService.getRoleByName(roles));
+        if (role != null) {
+            for (String roles : role) {
+                roleSet.add(roleService.getRoleByName(roles));
+            }
+            user.setRoles(roleSet);
         }
-        user.setRoles(roleSet);
         userService.updateUser(user, id);
         return "redirect:/admin";
     }
@@ -55,6 +59,8 @@ public class AdminController {
 
     @GetMapping("/new")
     public String newUser(Model model) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("admin", user);
         model.addAttribute("user", new User());
         return "admin/new";
     }
@@ -63,11 +69,20 @@ public class AdminController {
     public String createUser(@ModelAttribute("user") User user,
                              @RequestParam("role") String[] role) {
         Set<Role> roleSet = new HashSet<>();
-        for (String roles : role) {
-            roleSet.add(roleService.getRoleByName(roles));
+        if (role != null) {
+            for (String roles : role) {
+                roleSet.add(roleService.getRoleByName(roles));
+            }
+            user.setRoles(roleSet);
         }
-        user.setRoles(roleSet);
         userService.addUser(user);
         return "redirect:/admin";
+    }
+
+    @GetMapping("/info")
+    public String adminInfo(Model model) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("admin", userService.getUserByEmail(email));
+        return "admin/show_admin";
     }
 }

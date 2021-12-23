@@ -33,16 +33,11 @@ public class UserServiceImpl implements UserService {
         return userDao.getUserById(id);
     }
 
+    @Transactional
     @Override
-    public UserDetails getUserByName(String name) {
-        return userDao.getUserByName(name);
+    public UserDetails getUserByEmail(String email) {
+        return userDao.getUserByEmail(email);
     }
-
-//    @Transactional
-//    @Override
-//    public User getUserByName(String name) {
-//        return userDao.getUserByName(name);
-//    }
 
     @Transactional
     @Override

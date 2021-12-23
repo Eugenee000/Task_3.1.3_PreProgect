@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.List;
 
 public interface UserDao {
-    UserDetails getUserByName(String name);
+    UserDetails getUserByEmail(String name);
 
     void addUser(User user);
 

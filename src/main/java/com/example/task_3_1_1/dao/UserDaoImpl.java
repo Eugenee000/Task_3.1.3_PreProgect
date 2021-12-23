@@ -26,9 +26,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public UserDetails getUserByName(String name) {
-        return entityManager.createQuery("from User where lower(userName) like: theName", User.class)
-                .setParameter("theName", "%" + name.toLowerCase() + "%")
+    public UserDetails getUserByEmail(String email) {
+        return entityManager.createQuery("from User where lower(email) like: theEmail", User.class)
+                .setParameter("theEmail", "%" + email.toLowerCase() + "%")
                 .getSingleResult();
     }
 
@@ -51,7 +51,6 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void updateUser(User user, Long id) {
         User user1 = getUserById(id);
-        user.setId(id);
         user1.setUserName(user.getUserName());
         user1.setLastName(user.getLastName());
         user1.setEmail(user.getEmail());

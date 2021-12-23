@@ -2,13 +2,12 @@ package com.example.task_3_1_1.controllers;
 
 import com.example.task_3_1_1.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.security.Principal;
 
 @Controller
 public class UserController {
@@ -22,8 +21,9 @@ public class UserController {
     }
 
     @GetMapping(value = "/user")
-    public String index(Principal pri, Model modelMap) {
-        modelMap.addAttribute("user", userService.getUserByName(pri.getName()));
+    public String index(Model modelMap) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        modelMap.addAttribute("user", userService.getUserByEmail(email));
         return "admin/show_user";
     }
 }

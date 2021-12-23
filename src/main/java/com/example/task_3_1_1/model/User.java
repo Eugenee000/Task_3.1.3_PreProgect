@@ -30,7 +30,8 @@ public class User implements UserDetails {
     @Column(name = "age")
     private int age;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String userName, String lastName, String email, String password, int age, Set<Role> roles) {
         this.userName = userName;
@@ -42,9 +43,9 @@ public class User implements UserDetails {
     }
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="user_roles",
+    @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name="role_id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
     @Override
@@ -59,7 +60,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return email;
     }
 
     @Override
@@ -128,6 +129,14 @@ public class User implements UserDetails {
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public String getRoleName() {
+        String roleName = "";
+        for (Role role : roles) {
+            roleName += role.getName();
+        }
+        return roleName;
     }
 
     public void setRoles(Set<Role> roles) {
