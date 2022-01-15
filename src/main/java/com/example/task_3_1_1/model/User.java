@@ -1,14 +1,16 @@
 package com.example.task_3_1_1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+
 
 @Entity
+@NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
@@ -30,10 +32,17 @@ public class User implements UserDetails {
     @Column(name = "age")
     private int age;
 
-    public User() {
+    public User(String userName, String lastName, String email, String password, int age, List<Role> roles) {
+        this.userName = userName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.age = age;
+        this.roles = roles;
     }
 
-    public User(String userName, String lastName, String email, String password, int age, Set<Role> roles) {
+    public User(long id, String userName, String lastName, String email, String password, int age, List<Role> roles) {
+        this.id = id;
         this.userName = userName;
         this.lastName = lastName;
         this.email = email;
@@ -46,7 +55,7 @@ public class User implements UserDetails {
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private List<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -127,10 +136,11 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
+    @JsonIgnore
     public String getRoleName() {
         String roleName = "";
         for (Role role : roles) {
@@ -139,8 +149,16 @@ public class User implements UserDetails {
         return roleName;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRoles(List<Role> roles) {
+        this.roles = new ArrayList<>();
+        for (Role role : roles) {
+            if (role.getName().contains("ROLE_ADMIN")) {
+                this.roles.add(new Role("ROLE_ADMIN"));
+            }
+            if (role.getName().contains("ROLE_USER")) {
+                this.roles.add(new Role("ROLE_USER"));
+            }
+        }
     }
 
     @Override

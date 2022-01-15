@@ -10,8 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -40,7 +40,7 @@ public class AdminController {
     public String upDate(@ModelAttribute("user") User user,
                          @PathVariable("id") Long id,
                          @RequestParam(value = "role", required = false) String[] role) {
-        Set<Role> roleSet = new HashSet<>();
+        List<Role> roleSet = new ArrayList<>();
         if (role != null) {
             for (String roles : role) {
                 roleSet.add(roleService.getRoleByName(roles));
@@ -68,7 +68,7 @@ public class AdminController {
     @PostMapping()
     public String createUser(@ModelAttribute("user") User user,
                              @RequestParam("role") String[] role) {
-        Set<Role> roleSet = new HashSet<>();
+        List<Role> roleSet = new ArrayList<>();
         if (role != null) {
             for (String roles : role) {
                 roleSet.add(roleService.getRoleByName(roles));

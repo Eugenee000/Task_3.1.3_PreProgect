@@ -35,7 +35,7 @@
             </div>
             <div class="col-10 px-0" style="background-color: ghostwhite">
                 <div class="container-fluid">
-                    <h1 style="color: black" class="m-3">User Information-page</h1>
+                    <h1 style="color: black" class="m-3">Admin Information-page</h1>
                     <div class="tab-content" id="myTabContent">
                         <div class="card">
                             <div class="card-header">
@@ -55,16 +55,7 @@
                                         <th>Role</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td th:text="${admin.getId()}"></td>
-                                        <td th:text="${admin.getUserName()}"></td>
-                                        <td th:text="${admin.getLastName()}"></td>
-                                        <td th:text="${admin.getAge()}"></td>
-                                        <td th:text="${admin.getEmail()}"></td>
-                                        <td th:text="${admin.getRoleName()}"></td>
-                                    </tr>
-                                    </th:block>
+                                    <tbody id="body-user">
                                     </tbody>
                                 </table>
                             </div>
@@ -75,5 +66,7 @@
         </div>
     </div>
 </section>
+<script src="/showAdminInfo.js">
+</script>
 </body>
 </html>
